@@ -21,6 +21,7 @@ public class EnderecoDao {
             ps.setString(1, objeto.getLogradouro());
             ps.setString(2, objeto.getComplemento());
             ps.setString(3, objeto.getBairro());
+            ps.setInt(3, objeto.getCodigo());
             ps.executeUpdate();
             return true;
         } catch (SQLException | ClassNotFoundException ex) {
@@ -35,12 +36,43 @@ public class EnderecoDao {
         objeto.setLogradouro("Rua Osvaldo Cruz");
         objeto.setComplemento("A123");
         objeto.setBairro("Madalena");
+        objeto.getCodigo("123");
         
         boolean resultado = inserir(objeto);
         if (resultado) {
             JOptionPane.showMessageDialog(null, "Inserido com sucesso!");
         } else {
             JOptionPane.showMessageDialog(null, "Erro!");
+        }
+    }
+    
+    public static boolean alterar(Endereco objeto) {
+        String sql = "UPDATE endereco SET logradouro = ?, complemento = ?, bairro = ? WHERE codigo=?";
+        try {
+            PreparedStatement ps = conexao.Conexao.getConexao().prepareStatement(sql);
+            ps.setString(1, objeto.getLogradouro()); 
+            ps.setString(2, objeto.getComplemento());
+            ps.setString(3, objeto.getBairro());
+            ps.setInt(4, objeto.getCodigo());
+            ps.executeUpdate();
+            return true;
+        } catch (SQLException | ClassNotFoundException ex) {
+            System.out.println(ex.getMessage());
+            return false;
+        }
+    }
+    
+    
+    public static boolean excluir(Endereco objeto) {
+        String sql = "DELETE FROM endereco WHERE codigo=?";
+        try {
+            PreparedStatement ps = conexao.Conexao.getConexao().prepareStatement(sql);
+            ps.setInt(1, objeto.getCodigo());
+            ps.executeUpdate();
+            return true;
+        } catch (SQLException | ClassNotFoundException ex) {
+            System.out.println(ex.getMessage());
+            return false;
         }
     }
 
